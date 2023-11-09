@@ -15,6 +15,13 @@ internal class Program
         PassOne passOne = new(programCode);
 
         // pass two
-        // PassTwo passTwo = new(passOne.MainTable, passOne.LabelTabel);
+        PassTwo passTwo = new(passOne.MainTable, passOne.LabelTable);
+
+        // formatted print
+        // ReadWrite.FormattedWrite(passOne.MainTable, passTwo.ObjectCode);
+
+        // HTE calulation
+
+        // print HTE
     }
 }

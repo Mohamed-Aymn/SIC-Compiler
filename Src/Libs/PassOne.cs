@@ -1,3 +1,4 @@
+using SicCompiler.Libs.Common;
 using SicCompiler.Utils;
 
 namespace SicCompiler.Libs;
@@ -111,31 +112,5 @@ public class PassOne
     {
         string value = reference.Substring(2, reference.Length - 3);
         return value.Length;
-    }
-
-    public class LabelTableRecord
-    {
-        public string Label {get; set;}
-        public string Location {get; set;}
-        public LabelTableRecord (string label, string location)
-        {
-            Label = label;
-            Location = location;
-        }
-    }
-
-    public class PassOneTableRecord
-    {
-        public string? LocationCounter {get; set;}
-        public string? Label {get; set;}
-        public string Instruction {get; set;}
-        public string Reference {get; set;}
-        public PassOneTableRecord(string? locationCounter, string? label, string instruction, string reference)
-        {
-            LocationCounter = locationCounter;
-            Label = label;
-            Instruction = instruction;
-            Reference = reference;
-        }
     }
 }
