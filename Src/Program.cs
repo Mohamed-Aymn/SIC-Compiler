@@ -13,13 +13,15 @@ internal class Program
 
         // pass one
         PassOne passOne = new(programCode);
+        // debugging stuff
         foreach (var line in passOne.MainTable)
         {
-            Console.WriteLine(line.LocationCounter);
+            Console.WriteLine(line.LocationCounter + ": " + line.Instruction + " : " + line.Reference);
         }
+        Console.WriteLine("first line counter: " + passOne.MainTable.First.Value.LocationCounter);
 
         // pass two
-        PassTwo passTwo = new(passOne.MainTable, passOne.LabelTable);
+        // PassTwo passTwo = new(passOne.MainTable, passOne.LabelTable);
 
        // HTE calulation
         // HTE hte = new(passOne.MainTable, passTwo.ObjectCodeList);

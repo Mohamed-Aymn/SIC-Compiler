@@ -25,12 +25,11 @@ public class PassOne
             string reference = "";
             if(isFirstLine)
             {
-                locationCounter = "";
+                locationCounter = LocationCounter; // make it empty for the current use
                 label = words[0];
                 instruction = words[1];
                 reference = words[2];
-                LocationCounter = words[2];
-                isFirstLine = false;
+                LocationCounter = words[2]; // for the next use
             }
             if(wordCount == 2)
             {
@@ -39,7 +38,7 @@ public class PassOne
                 instruction = words[0];
                 reference = words[1];
             }
-            if(wordCount == 3)
+            if(wordCount == 3 && !isFirstLine)
             {
                 locationCounter = LocationCounter!;
                 label = words[0];
@@ -48,7 +47,8 @@ public class PassOne
             }
 
             // location counter addition
-            LocationCounter = LocationCounterHandler(instruction, reference);
+            LocationCounter = LocationCounterHandler(instruction, reference, isFirstLine);
+            isFirstLine = false;
 
             // add record (line of code) in the formatted table
             MainTable.AddLast(new PassOneTableRecord(
@@ -82,26 +82,34 @@ public class PassOne
         }
     }
 
-    public string LocationCounterHandler(string instruction, string reference)
+    public string LocationCounterHandler(string instruction, string reference, bool isFirstLine)
     {
-        if (reference == "RESW")
+        if (instruction == "RESW")
         {
             int incrementValue = 3 * int.Parse(reference);
-            LocationCounter = HexOperations.Addition(LocationCounter, incrementValue.ToString());
-        }else if(reference == "RESB")
+            LocationCounter = HexOperations.Addition(LocationCounter, incrementValue.ToString("X"));
+        }
+        else if(instruction == "RESB")
         {
             int incrementValue = 1 * int.Parse(reference);
-            LocationCounter = HexOperations.Addition(LocationCounter, incrementValue.ToString());
-        }else if(reference == "BYTE")
+            LocationCounter = HexOperations.Addition(LocationCounter, incrementValue.ToString("X"));
+        }
+        else if(instruction == "BYTE")
         {
             int incrementValue = 0;
             char operation = reference[0];
+            // it didn't enter this if condiditon
             if (operation == 'C')
             {
                 incrementValue = ConstantByteReferenceCalculation(reference);            
             }
-            LocationCounter = HexOperations.Addition(LocationCounter, incrementValue.ToString());
-        }else{
+            LocationCounter = HexOperations.Addition(LocationCounter, incrementValue.ToString("X"));
+        }
+        else if(isFirstLine)
+        {
+            LocationCounter = reference;
+        }
+        else{
             LocationCounter = HexOperations.Addition(LocationCounter, "3");
         }
 
