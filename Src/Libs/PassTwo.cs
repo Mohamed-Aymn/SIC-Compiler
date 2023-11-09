@@ -43,7 +43,7 @@ public class PassTwo
 
             // object code calculation
             string objectCode = line.Reference.Contains(",X")
-                ? IndirectAddressing(line.Instruction, line.Reference)
+                ? IndirectAddressing(labelTable, line.Label!, line.Instruction, line.Reference)
                 : DicrectAddressing(labelTable, line.Label!, line.Instruction);
 
             // add object code to the object code linked list
@@ -56,9 +56,11 @@ public class PassTwo
         return Convertor.InstructionOpCode[instruction] + LabelLocationFinder(labelTable, label);
     }
 
-    public string IndirectAddressing (string instruction, string reference)
+    public string IndirectAddressing (LinkedList<LabelTableRecord> labelTable, string label, string instruction, string reference)
     {
-        string binaryAddressCode = HexOperations.ToBinray(reference);
+        reference = reference.Substring(0, reference.Length - 2);
+        string location = LabelLocationFinder(labelTable, label);
+        string binaryAddressCode = HexOperations.ToBinray(location);
         binaryAddressCode = "1" + binaryAddressCode.Substring(1); // replace the first elemnt with 1
         return Convertor.InstructionOpCode[instruction] + BinaryOperations.ToHex(binaryAddressCode);
     }
