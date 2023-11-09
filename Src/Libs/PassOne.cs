@@ -57,7 +57,7 @@ public class PassOne
                         reference: reference));
 
             // if it is a new lable add it to symbol table, else ignore it
-            LabelHandler(locationCounter, words[1]);
+            LabelHandler(locationCounter, label);
         }
     }
 
