@@ -8,7 +8,6 @@ internal class Program
     private static void Main(string[] args)
     {
         // Read SIC code from us
-        Console.WriteLine("Enter a multi-line string (Press Enter twice to finish):");
         string programCode = ReadWrite.ReadProgramCode();
 
         // pass one
@@ -45,11 +44,7 @@ internal class Program
         // Console.WriteLine(hte.E);
 
         // formatted print
-        // program table
         ReadWrite.FormattedTableWrite(passOne.MainTable, passTwo.ObjectCodeList);
-        // HTE
-        // ReadWrite.FormattedLinesWrite(hte.H, hte.T. hte.E);
-
-
+        ReadWrite.FormattedHteWrite(hte.H, hte.T, hte.E);
     }
 }

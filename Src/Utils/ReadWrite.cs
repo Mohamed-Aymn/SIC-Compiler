@@ -6,6 +6,10 @@ public static class ReadWrite
 {
     public static string ReadProgramCode()
     {
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine("Enter a multi-line string (Press Enter twice to finish):");
+        Console.ResetColor();
+
         string input = "";
         string line;
 
@@ -20,6 +24,24 @@ public static class ReadWrite
 
     public static void FormattedTableWrite(LinkedList<PassOneTableRecord> mainTable, LinkedList<string> objectCodeList)
     {
+        // notes
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine(new string('*', 47));
+        Console.Write("- Every thing that you have imported in colored in ");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write("Yellow");
+        Console.Write("\n");
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.Write("- Every thing that the program created is colored in ");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Write("Cyan");
+        Console.Write("\n");
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine(new string('*', 47));
+        Console.Write("\n");
+        Console.Write("\n");
+        Console.WriteLine("Result:");
+
         // Table Header
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.Write("{0,-20}", "Location Coutner");
@@ -61,6 +83,7 @@ public static class ReadWrite
             catch
             {
                 Console.Write("\n");
+                Console.WriteLine(new string('-', 95));
                 break;
             }
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -71,5 +94,21 @@ public static class ReadWrite
         }
         Console.ResetColor();
         Console.Write("\n");
+    }
+
+    public static void FormattedHteWrite(string H, LinkedList<string> T, string E)
+    {
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.Write("HTA");
+        Console.Write("\n");
+
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine(H);
+        foreach (var line in T)
+        {
+            Console.WriteLine(line);
+        }
+        Console.WriteLine(E);
+        Console.ResetColor();
     }
 }
