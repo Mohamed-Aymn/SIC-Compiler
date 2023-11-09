@@ -7,7 +7,7 @@ public static class ReadWrite
         string input = "";
         string line;
 
-        while ((line = Console.ReadLine()) != "")
+        while ((line = Console.ReadLine()!) != "")
         {
             // Environment.NewLine == "\n"
             input += line + Environment.NewLine;
@@ -15,5 +15,4 @@ public static class ReadWrite
 
         return input;
     }
-
 }

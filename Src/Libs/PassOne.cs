@@ -1,10 +1,12 @@
+using SicCompiler.Utils;
+
 namespace SicCompiler.Libs;
 
 public class PassOne
 {
-    public LinkedList<PassOneTableRecord> MainTable {set; get;} = new();
-    public LinkedList<LabelTabel> LabelTabel{set; get;} = new();
-    public string LocationCounter {get; set;}
+    public LinkedList<PassOneTableRecord> MainTable {get; set;} = new();
+    public LinkedList<LabelTableRecord> LabelTable{get; set;} = new();
+    public string LocationCounter {get; set;} = "";
     public PassOne (string programCode)
     {
         // create organized table (this is a vertical linked list as the variable here is table length not width)
@@ -13,40 +15,39 @@ public class PassOne
         foreach (string line in lines)
         {
             // Split the string into words using whitespace as the delimiter
-            string[] words = inputString.Split(new char[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string [] words = FormatCodeLine(line);
             int wordCount = words.Length;
 
-            string locationCounter;
-            string label;
-            string instruction;
-            string reference;
+            string locationCounter = "";
+            string label = "";
+            string instruction = "";
+            string reference = "";
             if(isFirstLine)
             {
                 locationCounter = "";
-                label = "";
+                label = words[0];
                 instruction = words[1];
                 reference = words[2];
-                LocationCounter = words[3];
+                LocationCounter = words[2];
                 isFirstLine = false;
             }
             if(wordCount == 2)
             {
-                // locationCounter = LocationCounterHandler(instruction: words[0], reference: words[1])
-                locationCounter = LocationCounter;
+                locationCounter = LocationCounter!;
                 label = "";
                 instruction = words[0];
                 reference = words[1];
             }
             if(wordCount == 3)
             {
-                locationCounter = LocationCounter;
+                locationCounter = LocationCounter!;
                 label = words[0];
                 instruction = words[1];
                 reference = words[2];
             }
 
             // location counter addition
-            LocationCounter = LocationCounterHandler(string instruction, string reference);
+            LocationCounter = LocationCounterHandler(instruction, reference);
 
             // add record (line of code) in the formatted table
             MainTable.AddLast(new PassOneTableRecord(
@@ -60,15 +61,22 @@ public class PassOne
         }
     }
 
+    public string [] FormatCodeLine(string line)
+    {
+        string trimmedString = line.Trim();
+        string[] words = line.Split(new char[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        return words; 
+    }
+
     public void LabelHandler(string locationCounter, string label)
     {
-        bool isLabelFound = LabelTabel.Any(st => st.Symbol == label);
+        bool isLabelFound = LabelTable.Any(record => record.Label == label);
 
         if (!isLabelFound)
         {
-            LabelTabel.AddLast(new LabelTableRecord(
-                label: label;
-                location: location;
+            LabelTable.AddLast(new LabelTableRecord(
+                location: locationCounter,
+                label: label
             ));
         }
     }
@@ -77,15 +85,21 @@ public class PassOne
     {
         if (reference == "RESW")
         {
-            int intValue = 3 * int.Parse(reference);
-            LocationCounter = HexOperations.Addition(LocationCounter, intValue.ToString());
+            int incrementValue = 3 * int.Parse(reference);
+            LocationCounter = HexOperations.Addition(LocationCounter, incrementValue.ToString());
         }else if(reference == "RESB")
         {
-            int intValue = 1 * int.Parse(reference);
-            LocationCounter = HexOperations.Addition(LocationCounter, intValue.ToString());
+            int incrementValue = 1 * int.Parse(reference);
+            LocationCounter = HexOperations.Addition(LocationCounter, incrementValue.ToString());
         }else if(reference == "BYTE")
         {
-            //
+            int incrementValue = 0;
+            char operation = reference[0];
+            if (operation == 'C')
+            {
+                incrementValue = ConstantByteReferenceCalculation(reference);            
+            }
+            LocationCounter = HexOperations.Addition(LocationCounter, incrementValue.ToString());
         }else{
             LocationCounter = HexOperations.Addition(LocationCounter, "3");
         }
@@ -93,7 +107,13 @@ public class PassOne
         return LocationCounter;
     }
 
-    private class LabelTableRecord
+    public int ConstantByteReferenceCalculation (string reference)
+    {
+        string value = reference.Substring(2, reference.Length - 3);
+        return value.Length;
+    }
+
+    public class LabelTableRecord
     {
         public string Label {get; set;}
         public string Location {get; set;}
@@ -104,7 +124,7 @@ public class PassOne
         }
     }
 
-    private class PassOneTableRecord
+    public class PassOneTableRecord
     {
         public string? LocationCounter {get; set;}
         public string? Label {get; set;}
