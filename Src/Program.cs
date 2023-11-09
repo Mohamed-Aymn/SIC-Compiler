@@ -24,19 +24,17 @@ internal class Program
         //     Console.WriteLine(line.Location + ": " + line.Label);
         // }
 
-
-
         // pass two
         PassTwo passTwo = new(passOne.MainTable, passOne.LabelTable);
         // debuggin stuff
-
-        foreach (var line in passTwo.ObjectCodeList)
-        {
-            Console.WriteLine(line);
-        }
+        // foreach (var line in passTwo.ObjectCodeList)
+        // {
+        //     Console.WriteLine(line);
+        // }
 
        // HTE calulation
-        // HTE hte = new(passOne.MainTable, passTwo.ObjectCodeList);
+        HTE hte = new(passOne.MainTable, passTwo.ObjectCodeList);
+        // debugging stuf
         // Console.WriteLine(hte.H);
         // Console.WriteLine("*********8");
         // foreach (var line in hte.T)
@@ -46,11 +44,10 @@ internal class Program
         // Console.WriteLine("*********8");
         // Console.WriteLine(hte.E);
 
-
         // formatted print
-        // ReadWrite.FormattedWrite(passOne.MainTable, passTwo.ObjectCode);
-
-
-        // print HTE
+        // program table
+        // ReadWrite.FormattedTableWrite(passOne.MainTable, passTwo.ObjectCode);
+        // HTE
+        // ReadWrite.FormattedLinesWrite(hte.H, hte.T. hte.E);
     }
 }

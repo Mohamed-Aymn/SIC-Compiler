@@ -4,9 +4,9 @@ namespace SicCompiler.Libs;
 
 public class HTE
 {
-    public string H {set; get;}
-    public LinkedList<string> T {set; get;} = new();
-    public string E {set; get;}
+    public string H { set; get; }
+    public LinkedList<string> T { set; get; } = new();
+    public string E { set; get; }
 
     private bool isFirstLine { set; get; } = true;
     private int currentIndex { set; get; }
@@ -38,9 +38,14 @@ public class HTE
             try
             {
                 currentObjectCode = objectCodeList.ElementAt(currentIndex);
+                Console.WriteLine(currentObjectCode);
             }
             catch
             {
+                if(t != "T")
+                {
+                    T.AddLast(t);
+                }
                 break;
             }
 
@@ -54,12 +59,28 @@ public class HTE
             // check if no object code
             if (currentObjectCode?.Length == 0)
             {
-                T.AddLast(t);
-                // t = "T";
+                // if (T.Last!.Value != null && T.Last!.Value != "T")
+                string currentT = "";
+                try
+                {
+                    currentT = T.Last!.Value;
+                }
+                catch
+                {
+                    currentT = t;
+                }
+                bool isExist = T.Any(t => t == currentT);
+                if (!isExist)
+                {
+                    T.AddLast(currentT);
+                }
+                // T.AddLast(t);
+                // }
+                t = "T";
                 // break;
                 currentIndex++;
-                TGenerator(mainTable, objectCodeList);
-                // continue;
+                // TGenerator(mainTable, objectCodeList);
+                continue;
             }
 
             // check the end of the loop
