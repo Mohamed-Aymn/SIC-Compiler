@@ -73,7 +73,7 @@ public class PassOne
     {
         bool isLabelFound = LabelTable.Any(record => record.Label == label);
 
-        if (!isLabelFound)
+        if (!isLabelFound && label!= "")
         {
             LabelTable.AddLast(new LabelTableRecord(
                 location: locationCounter,
