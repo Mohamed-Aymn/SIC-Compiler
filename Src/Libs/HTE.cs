@@ -38,7 +38,6 @@ public class HTE
             try
             {
                 currentObjectCode = objectCodeList.ElementAt(currentIndex);
-                Console.WriteLine(currentObjectCode);
             }
             catch
             {

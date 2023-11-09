@@ -46,8 +46,10 @@ internal class Program
 
         // formatted print
         // program table
-        // ReadWrite.FormattedTableWrite(passOne.MainTable, passTwo.ObjectCode);
+        ReadWrite.FormattedTableWrite(passOne.MainTable, passTwo.ObjectCodeList);
         // HTE
         // ReadWrite.FormattedLinesWrite(hte.H, hte.T. hte.E);
+
+
     }
 }
