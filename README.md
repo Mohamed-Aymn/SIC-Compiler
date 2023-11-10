@@ -10,6 +10,7 @@
     -   [Output](#output)
 
 ## Descrption
+Object code genertor (component of compiler) which is tailored for SIC computer architecture and that is built to take SIC code form the uster and outputs the formated form of it to demonistrate how this (the object code generator) works under the hood with the compiler. 
 
 ## Good to know
 
