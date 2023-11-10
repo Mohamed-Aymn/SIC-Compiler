@@ -99,7 +99,7 @@ public static class ReadWrite
     public static void FormattedHteWrite(string H, LinkedList<string> T, string E)
     {
         Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.Write("HTA");
+        Console.Write("HTE");
         Console.Write("\n");
 
         Console.ForegroundColor = ConsoleColor.Cyan;
