@@ -1,4 +1,4 @@
-namespace Common.SystemModules;
+namespace Common.Helpers;
 
 public static class Convertor
 {
