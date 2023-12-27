@@ -22,7 +22,7 @@ public static class ReadWrite
         return input;
     }
 
-    public static void FormattedTableWrite(LinkedList<PassOneTableRecord> mainTable, LinkedList<string> objectCodeList)
+    public static void FormattedTableWrite(PassOneTable passOneTable, LinkedList<string> objectCodeList)
     {
         // notes
         Console.ForegroundColor = ConsoleColor.Magenta;
@@ -58,7 +58,7 @@ public static class ReadWrite
         // Print table rows
         int currentRow = 0;
         bool isFirstRow = true;
-        foreach (var row in mainTable)
+        foreach (var row in passOneTable.Table)
         {
             // Location Counter
             Console.ForegroundColor = ConsoleColor.Cyan;

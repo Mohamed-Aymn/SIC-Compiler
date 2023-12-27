@@ -1,17 +1,16 @@
 using Common.PassOne;
 using Common.ArithmeticOps;
 using Common.Helpers;
-using Common.SystemModules;
 
 namespace SicObjectCodeGenerator.Libs;
 
 public class PassTwo
 {
     public LinkedList<string> ObjectCodeList { get; set; } = new();
-    public PassTwo(LinkedList<PassOneTableRecord> mainTable, LinkedList<LabelTableRecord> labelTable)
+    public PassTwo(PassOneTable passOneTable, LabelTable labelTable)
     {
         bool isFirstLine = true;
-        foreach (var line in mainTable)
+        foreach (var line in passOneTable.Table)
         {
             // first and last line handling
             if (isFirstLine)
@@ -52,24 +51,19 @@ public class PassTwo
         }
     }
 
-    public string DicrectAddressing(LinkedList<LabelTableRecord> labelTable, string reference, string instruction)
+    public string DicrectAddressing(LabelTable labelTable, string reference, string instruction)
     {
-        return Convertor.InstructionOpCode[instruction] + LabelLocationFinder(labelTable, reference);
+        return Convertor.InstructionOpCode[instruction] + labelTable.LabelLocationFinder(labelTable, reference);
     }
 
-    public string IndirectAddressing(LinkedList<LabelTableRecord> labelTable, string label, string instruction, string reference)
+    public string IndirectAddressing(LabelTable labelTable, string label, string instruction, string reference)
     {
         reference = reference.Substring(0, reference.Length - 2);
         // string location = LabelLocationFinder(labelTable, label);
-        string location = LabelLocationFinder(labelTable, reference);
+        string location = labelTable.LabelLocationFinder(labelTable, reference);
         string binaryAddressCode = HexOperations.ToBinray(location);
         binaryAddressCode = "1" + binaryAddressCode.Substring(1); // replace the first elemnt with 1
         return Convertor.InstructionOpCode[instruction] + BinaryOperations.ToHex(binaryAddressCode);
     }
 
-    public string LabelLocationFinder(LinkedList<LabelTableRecord> labelTable, string reference)
-    {
-        LabelTableRecord foundRecord = labelTable.FirstOrDefault(record => record.Label == reference)!;
-        return foundRecord!.Location;
-    }
 }

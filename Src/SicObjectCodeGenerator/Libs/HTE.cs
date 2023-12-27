@@ -11,14 +11,14 @@ public class HTE
     private bool isFirstLine { set; get; } = true;
     private int currentIndex { set; get; }
 
-    public HTE(LinkedList<PassOneTableRecord> mainTable, LinkedList<string> objectCodeList)
+    public HTE(PassOneTable passOneTable, LinkedList<string> objectCodeList)
     {
-        HGenerator(mainTable, objectCodeList);
-        TGenerator(mainTable, objectCodeList);
+        HGenerator(passOneTable.Table, objectCodeList);
+        TGenerator(passOneTable.Table, objectCodeList);
         EGenerator(objectCodeList);
     }
 
-    public void HGenerator(LinkedList<PassOneTableRecord> mainTable, LinkedList<string> objectCodeList)
+    public void HGenerator(LinkedList<PassOneTableElement> mainTable, LinkedList<string> objectCodeList)
     {
         string programName = mainTable.First!.Value.Label!;
         if (programName.Length < 6)
@@ -29,7 +29,7 @@ public class HTE
         string lasttObjectCode = objectCodeList.Last!.Value!.PadLeft(6, '0');
         H = "H." + programName + "." + firstObjectCode + "." + lasttObjectCode;
     }
-    public void TGenerator(LinkedList<PassOneTableRecord> mainTable, LinkedList<string> objectCodeList)
+    public void TGenerator(LinkedList<PassOneTableElement> mainTable, LinkedList<string> objectCodeList)
     {
         string t = "T";
         foreach (var line in mainTable)

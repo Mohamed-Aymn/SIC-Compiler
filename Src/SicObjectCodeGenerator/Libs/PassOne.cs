@@ -1,14 +1,13 @@
 using Common.ArithmeticOps;
 using Common.PassOne;
-using Common.SystemModules;
 using Common.ValueObjects;
 
 namespace SicObjectCodeGenerator.Libs;
 
 public class PassOne
 {
-    public LinkedList<PassOneTableRecord> MainTable { get; set; } = new();
-    public LinkedList<LabelTableRecord> LabelTable { get; set; } = new();
+    public PassOneTable PassOneTable { get; set; } = new();
+    public LabelTable LabelTable { get; set; } = new();
     public string LocationCounter { get; set; } = "";
     public PassOne(string programCode)
     {
@@ -27,27 +26,10 @@ public class PassOne
             isFirstLine = false;
 
             // add record (line of code) in the formatted table
-            MainTable.AddLast(new PassOneTableRecord(
-                        locationCounter: lineElements.LocationCounter,
-                        label: lineElements.Label,
-                        instruction: lineElements.Instruction,
-                        reference: lineElements.Reference));
+            PassOneTable.AddElement(lineElements);
 
             // if it is a new lable add it to symbol table, else ignore it
-            LabelHandler(lineElements.LocationCounter, lineElements.Label);
-        }
-    }
-
-    public void LabelHandler(string locationCounter, string label)
-    {
-        bool isLabelFound = LabelTable.Any(record => record.Label == label);
-
-        if (!isLabelFound && label != "")
-        {
-            LabelTable.AddLast(new LabelTableRecord(
-                location: locationCounter,
-                label: label
-            ));
+            LabelTable.LabelHandler(lineElements.LocationCounter, lineElements.Label);
         }
     }
 

@@ -13,13 +13,13 @@ internal class Program
         PassOne passOne = new(programCode);
 
         // pass two
-        PassTwo passTwo = new(passOne.MainTable, passOne.LabelTable);
+        PassTwo passTwo = new(passOne.PassOneTable, passOne.LabelTable);
 
         // HTE calulation
-        HTE hte = new(passOne.MainTable, passTwo.ObjectCodeList);
+        HTE hte = new(passOne.PassOneTable, passTwo.ObjectCodeList);
 
         // formatted print
-        ReadWrite.FormattedTableWrite(passOne.MainTable, passTwo.ObjectCodeList);
+        ReadWrite.FormattedTableWrite(passOne.PassOneTable, passTwo.ObjectCodeList);
         ReadWrite.FormattedHteWrite(hte.H, hte.T, hte.E);
     }
 }
