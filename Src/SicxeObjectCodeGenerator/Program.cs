@@ -13,7 +13,7 @@ internal class Program
         PassOne passOne = new(programCode);
 
         // pass two
-        PassTwo passTwo = new(passOne.MainTable, passOne.LabelTable);
+        PassTwo passTwo = new(passOne.PassOneTable, passOne.LabelTable);
 
         // HTE calulation
 
