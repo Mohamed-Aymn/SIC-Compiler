@@ -1,5 +1,7 @@
-using Common.SystemModules;
 using Common.ArithmeticOps;
+using Common.PassOne;
+using Common.SystemModules;
+using Common.ValueObjects;
 
 namespace SicObjectCodeGenerator.Libs;
 
@@ -11,62 +13,29 @@ public class PassOne
     public PassOne(string programCode)
     {
         // create organized table (this is a vertical linked list as the variable here is table length not width)
-        string[] lines = programCode.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+        CodeFormatter codeFormatter = new(programCode);
         bool isFirstLine = true;
-        foreach (string line in lines)
+        foreach (string line in codeFormatter.Lines)
         {
-            // Split the string into words using whitespace as the delimiter
-            string[] words = FormatCodeLine(line);
-            int wordCount = words.Length;
-
-            string locationCounter = "";
-            string label = "";
-            string instruction = "";
-            string reference = "";
-            if (isFirstLine)
-            {
-                locationCounter = LocationCounter; // make it empty for the current use
-                label = words[0];
-                instruction = words[1];
-                reference = words[2];
-                LocationCounter = words[2]; // for the next use
-            }
-            if (wordCount == 2)
-            {
-                locationCounter = LocationCounter!;
-                label = "";
-                instruction = words[0];
-                reference = words[1];
-            }
-            if (wordCount == 3 && !isFirstLine)
-            {
-                locationCounter = LocationCounter!;
-                label = words[0];
-                instruction = words[1];
-                reference = words[2];
-            }
+            LineElements lineElements = codeFormatter.LineFormatter(line, isFirstLine, LocationCounter);
 
             // location counter addition
-            LocationCounter = LocationCounterHandler(instruction, reference, isFirstLine);
+            LocationCounter = LocationCounterHandler(
+                    lineElements.Instruction,
+                    lineElements.Reference,
+                    isFirstLine);
             isFirstLine = false;
 
             // add record (line of code) in the formatted table
             MainTable.AddLast(new PassOneTableRecord(
-                        locationCounter: locationCounter,
-                        label: label,
-                        instruction: instruction,
-                        reference: reference));
+                        locationCounter: lineElements.LocationCounter,
+                        label: lineElements.Label,
+                        instruction: lineElements.Instruction,
+                        reference: lineElements.Reference));
 
             // if it is a new lable add it to symbol table, else ignore it
-            LabelHandler(locationCounter, label);
+            LabelHandler(lineElements.LocationCounter, lineElements.Label);
         }
-    }
-
-    public string[] FormatCodeLine(string line)
-    {
-        string trimmedString = line.Trim();
-        string[] words = line.Split(new char[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-        return words;
     }
 
     public void LabelHandler(string locationCounter, string label)

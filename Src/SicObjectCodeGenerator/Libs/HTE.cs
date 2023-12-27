@@ -1,4 +1,4 @@
-using Common.SystemModules;
+using Common.PassOne;
 
 namespace SicObjectCodeGenerator.Libs;
 
