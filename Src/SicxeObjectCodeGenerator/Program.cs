@@ -10,8 +10,10 @@ internal class Program
         string programCode = ReadWrite.ReadProgramCode();
 
         // pass one
+        PassOne passOne = new(programCode);
 
         // pass two
+        PassTwo passTwo = new(passOne.MainTable, passOne.LabelTable);
 
         // HTE calulation
 
