@@ -1,4 +1,4 @@
-namespace SicCompiler.Libs.Common;
+namespace Common.SystemModules;
 
 public class LabelTableRecord
 {

@@ -1,6 +1,6 @@
-using SicCompiler.Libs.Common;
+using Common.SystemModules;
 
-namespace SicCompiler.Utils;
+namespace Common.Utils;
 
 public static class ReadWrite
 {
@@ -69,7 +69,7 @@ public static class ReadWrite
             Console.Write("{0,-20} {1,-20} {2,-20}", row.Label, row.Instruction, row.Reference);
 
             // Object Code
-            if(isFirstRow)
+            if (isFirstRow)
             {
                 Console.Write("\n");
                 isFirstRow = false;

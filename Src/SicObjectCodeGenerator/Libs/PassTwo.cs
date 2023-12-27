@@ -1,7 +1,7 @@
-using SicCompiler.Libs.Common;
-using SicCompiler.Utils;
+using Common.SystemModules;
+using Common.ArithmeticOps;
 
-namespace SicCompiler.Libs;
+namespace SicObjectCodeGenerator.Libs;
 
 public class PassTwo
 {

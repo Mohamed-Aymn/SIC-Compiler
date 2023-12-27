@@ -1,6 +1,6 @@
-using SicCompiler.Libs.Common;
+using Common.SystemModules;
 
-namespace SicCompiler.Libs;
+namespace SicObjectCodeGenerator.Libs;
 
 public class HTE
 {
@@ -10,7 +10,7 @@ public class HTE
 
     private bool isFirstLine { set; get; } = true;
     private int currentIndex { set; get; }
-        
+
     public HTE(LinkedList<PassOneTableRecord> mainTable, LinkedList<string> objectCodeList)
     {
         HGenerator(mainTable, objectCodeList);
@@ -41,7 +41,7 @@ public class HTE
             }
             catch
             {
-                if(t != "T")
+                if (t != "T")
                 {
                     T.AddLast(t);
                 }

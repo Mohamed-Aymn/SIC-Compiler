@@ -1,14 +1,14 @@
-using SicCompiler.Libs.Common;
-using SicCompiler.Utils;
+using Common.SystemModules;
+using Common.ArithmeticOps;
 
-namespace SicCompiler.Libs;
+namespace SicObjectCodeGenerator.Libs;
 
 public class PassOne
 {
-    public LinkedList<PassOneTableRecord> MainTable {get; set;} = new();
-    public LinkedList<LabelTableRecord> LabelTable{get; set;} = new();
-    public string LocationCounter {get; set;} = "";
-    public PassOne (string programCode)
+    public LinkedList<PassOneTableRecord> MainTable { get; set; } = new();
+    public LinkedList<LabelTableRecord> LabelTable { get; set; } = new();
+    public string LocationCounter { get; set; } = "";
+    public PassOne(string programCode)
     {
         // create organized table (this is a vertical linked list as the variable here is table length not width)
         string[] lines = programCode.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
@@ -16,14 +16,14 @@ public class PassOne
         foreach (string line in lines)
         {
             // Split the string into words using whitespace as the delimiter
-            string [] words = FormatCodeLine(line);
+            string[] words = FormatCodeLine(line);
             int wordCount = words.Length;
 
             string locationCounter = "";
             string label = "";
             string instruction = "";
             string reference = "";
-            if(isFirstLine)
+            if (isFirstLine)
             {
                 locationCounter = LocationCounter; // make it empty for the current use
                 label = words[0];
@@ -31,14 +31,14 @@ public class PassOne
                 reference = words[2];
                 LocationCounter = words[2]; // for the next use
             }
-            if(wordCount == 2)
+            if (wordCount == 2)
             {
                 locationCounter = LocationCounter!;
                 label = "";
                 instruction = words[0];
                 reference = words[1];
             }
-            if(wordCount == 3 && !isFirstLine)
+            if (wordCount == 3 && !isFirstLine)
             {
                 locationCounter = LocationCounter!;
                 label = words[0];
@@ -62,18 +62,18 @@ public class PassOne
         }
     }
 
-    public string [] FormatCodeLine(string line)
+    public string[] FormatCodeLine(string line)
     {
         string trimmedString = line.Trim();
         string[] words = line.Split(new char[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-        return words; 
+        return words;
     }
 
     public void LabelHandler(string locationCounter, string label)
     {
         bool isLabelFound = LabelTable.Any(record => record.Label == label);
 
-        if (!isLabelFound && label!= "")
+        if (!isLabelFound && label != "")
         {
             LabelTable.AddLast(new LabelTableRecord(
                 location: locationCounter,
@@ -89,34 +89,35 @@ public class PassOne
             int incrementValue = 3 * int.Parse(reference);
             LocationCounter = HexOperations.Addition(LocationCounter, incrementValue.ToString("X"));
         }
-        else if(instruction == "RESB")
+        else if (instruction == "RESB")
         {
             int incrementValue = 1 * int.Parse(reference);
             LocationCounter = HexOperations.Addition(LocationCounter, incrementValue.ToString("X"));
         }
-        else if(instruction == "BYTE")
+        else if (instruction == "BYTE")
         {
             int incrementValue = 0;
             char operation = reference[0];
             // it didn't enter this if condiditon
             if (operation == 'C')
             {
-                incrementValue = ConstantByteReferenceCalculation(reference);            
+                incrementValue = ConstantByteReferenceCalculation(reference);
             }
             LocationCounter = HexOperations.Addition(LocationCounter, incrementValue.ToString("X"));
         }
-        else if(isFirstLine)
+        else if (isFirstLine)
         {
             LocationCounter = reference;
         }
-        else{
+        else
+        {
             LocationCounter = HexOperations.Addition(LocationCounter, "3");
         }
 
         return LocationCounter;
     }
 
-    public int ConstantByteReferenceCalculation (string reference)
+    public int ConstantByteReferenceCalculation(string reference)
     {
         string value = reference.Substring(2, reference.Length - 3);
         return value.Length;

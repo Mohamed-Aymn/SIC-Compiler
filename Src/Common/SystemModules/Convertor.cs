@@ -1,4 +1,4 @@
-namespace SicCompiler.Libs;
+namespace Common.SystemModules;
 
 public static class Convertor
 {
