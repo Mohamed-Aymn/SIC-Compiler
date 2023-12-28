@@ -48,7 +48,7 @@ public class PassTwo
             // all of these should return decimal
             string opcode = OpcodeHandler(line.Instruction);
             Nixbpe nixbpe = NixbpeHandler(line.Instruction, line.Reference);
-            string thirdPart = ThirdPartHandler(labelTable, line.Reference, nixbpe.B, nixbpe.P);
+            string thirdPart = ThirdPartHandler(labelTable, line.Reference, nixbpe);
 
             // object code hex convertor
             string objectCode = ObjectCodeGenerator(opcode, nixbpe, thirdPart);
@@ -61,18 +61,20 @@ public class PassTwo
     {
         string binary = $"{opcode}{nixbpe.N}{nixbpe.I}{nixbpe.X}{nixbpe.B}{nixbpe.P}{nixbpe.E}{thirdPart}";
         string result = "";
+        int loopLength = binary.Length / 4;
 
-        for (int i = 0; i < binary.Length / 4; i++)
+        for (int i = 0; i < loopLength; i++)
         {
             string firstFourCharacters = binary.Substring(0, 4);
             binary = binary.Substring(4);
             result += BinaryOperations.ToHex(firstFourCharacters.ToString());
         }
 
-        return (nixbpe.E == "1") ? result.PadRight(8, '0') : result.PadRight(6, '0');
+        // return (nixbpe.E == "1") ? result.PadRight(8, '0') : result.PadRight(6, '0');
+        return result;
     }
 
-    private string ThirdPartHandler(LabelTable labelTable, string reference, string b, string p)
+    private string ThirdPartHandler(LabelTable labelTable, string reference, Nixbpe nixbpe)
     {
         string label = "";
         if (reference.Contains(",X"))
@@ -84,7 +86,7 @@ public class PassTwo
             label = reference.Substring(1);
         }
 
-        string targetAddress = labelTable.LabelLocationFinder(reference);
+        string targetAddress = labelTable.LabelLocationFinder(label);
         string thirdPartResult = "";
         if (targetAddress != "")
         {
@@ -97,11 +99,11 @@ public class PassTwo
         {
             foreach (char character in label)
             {
-                thirdPartResult += HexOperations.ToBinray(character.ToString()).PadLeft(12, '0');
+                thirdPartResult += HexOperations.ToBinray(character.ToString());
             }
         }
 
-        return thirdPartResult;
+        return (nixbpe.E == "1") ? thirdPartResult.PadLeft(20, '0') : thirdPartResult.PadLeft(12, '0');
     }
 
     private Nixbpe NixbpeHandler(string instruction, string reference)
