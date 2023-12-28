@@ -39,14 +39,14 @@ public class PassOne
         if (isFirstLine)
         {
             LocationCounter = reference;
-            return LocationCounter;
+            return LocationCounter.PadLeft(4, '0');
         }
 
         // format 4
         if (instruction[0] == '+')
         {
             LocationCounter = HexOperations.Addition(LocationCounter, "4");
-            return LocationCounter;
+            return LocationCounter.PadLeft(4, '0');
         }
 
         switch (instruction)
@@ -62,6 +62,7 @@ public class PassOne
                 break;
         }
 
+        LocationCounter = LocationCounter.PadLeft(4, '0');
         return LocationCounter;
     }
 }

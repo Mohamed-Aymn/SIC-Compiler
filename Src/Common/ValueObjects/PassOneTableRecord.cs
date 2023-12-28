@@ -9,6 +9,7 @@ public record PassOneTableElement
     public string Reference { get; set; }
     public PassOneTableElement(string? locationCounter, string? label, string instruction, string reference)
     {
+        ;
         LocationCounter = locationCounter;
         Label = label;
         Instruction = instruction;

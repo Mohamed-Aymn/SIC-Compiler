@@ -12,8 +12,7 @@ public class CodeFormatter
 
     public string[] SplitLines(string programCode)
     {
-        string[] lines = programCode.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-        return lines;
+        return programCode.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
     }
 
     public LineElements LineFormatter(string line, bool isFirstLine, string locationCounter)
@@ -30,6 +29,13 @@ public class CodeFormatter
             lineElements.Instruction = words[1];
             lineElements.Reference = words[2];
             lineElements.LocationCounter = words[2]; // for the next use
+        }
+        if (wordCount == 1)
+        {
+            lineElements.LocationCounter = locationCounter;
+            lineElements.Label = "";
+            lineElements.Instruction = words[0];
+            lineElements.Reference = "";
         }
         if (wordCount == 2)
         {

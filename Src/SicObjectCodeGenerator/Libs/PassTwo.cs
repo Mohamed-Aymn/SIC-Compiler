@@ -53,14 +53,14 @@ public class PassTwo
 
     public string DicrectAddressing(LabelTable labelTable, string reference, string instruction)
     {
-        return Convertor.InstructionOpCode[instruction] + labelTable.LabelLocationFinder(labelTable, reference);
+        return Convertor.InstructionOpCode[instruction] + labelTable.LabelLocationFinder(reference);
     }
 
     public string IndirectAddressing(LabelTable labelTable, string label, string instruction, string reference)
     {
         reference = reference.Substring(0, reference.Length - 2);
         // string location = LabelLocationFinder(labelTable, label);
-        string location = labelTable.LabelLocationFinder(labelTable, reference);
+        string location = labelTable.LabelLocationFinder(reference);
         string binaryAddressCode = HexOperations.ToBinray(location);
         binaryAddressCode = "1" + binaryAddressCode.Substring(1); // replace the first elemnt with 1
         return Convertor.InstructionOpCode[instruction] + BinaryOperations.ToHex(binaryAddressCode);

@@ -15,6 +15,19 @@ public static class HexOperations
         return sum.ToString("X");
     }
 
+    public static string Subtraction(string n1, string n2)
+    {
+        int num1 = int.Parse(n1, System.Globalization.NumberStyles.HexNumber);
+        int num2 = int.Parse(n2, System.Globalization.NumberStyles.HexNumber);
+
+        // Perform subtraction
+        int difference = num1 - num2;
+
+        // Convert the result back to a hexadecimal string
+        return difference.ToString("X");
+
+    }
+
     public static string ToBinray(string hex)
     {
         string binary = "";

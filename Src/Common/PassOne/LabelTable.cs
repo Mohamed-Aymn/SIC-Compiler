@@ -18,9 +18,9 @@ public class LabelTable
         }
     }
 
-    public string LabelLocationFinder(LabelTable labelTable, string reference)
+    public string LabelLocationFinder(string reference)
     {
-        LabelTableElement foundRecord = labelTable.Table.FirstOrDefault(record => record.Label == reference)!;
-        return foundRecord!.Location;
+        LabelTableElement foundRecord = Table.FirstOrDefault(record => record.Label == reference)!;
+        return foundRecord.Location ?? "";
     }
 }
