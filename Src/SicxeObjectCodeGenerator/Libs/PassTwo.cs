@@ -48,7 +48,7 @@ public class PassTwo
             // all of these should return decimal
             string opcode = OpcodeHandler(line.Instruction);
             Nixbpe nixbpe = NixbpeHandler(line.Instruction, line.Reference);
-            string thirdPart = ThirdPartHandler(labelTable, line.Reference, nixbpe);
+            string thirdPart = ThirdPartHandler(labelTable, line.Reference, line.LocationCounter, nixbpe);
 
             // object code hex convertor
             string objectCode = ObjectCodeGenerator(opcode, nixbpe, thirdPart);
@@ -74,7 +74,7 @@ public class PassTwo
         return result;
     }
 
-    private string ThirdPartHandler(LabelTable labelTable, string reference, Nixbpe nixbpe)
+    private string ThirdPartHandler(LabelTable labelTable, string reference, string locationCounter, Nixbpe nixbpe)
     {
         string label = "";
         if (reference.Contains(",X"))
@@ -88,12 +88,31 @@ public class PassTwo
 
         string targetAddress = labelTable.LabelLocationFinder(label);
         string thirdPartResult = "";
-        if (targetAddress != "")
+
+        if (targetAddress != "" && nixbpe.X != "1")
         {
             foreach (char character in targetAddress)
             {
                 thirdPartResult += HexOperations.ToBinray(character.ToString());
             }
+        }
+        else if (targetAddress != "" && nixbpe.X == "1")
+        {
+            string locationCounterAfterAddition = HexOperations.Addition("3", locationCounter);
+            string displacement = HexOperations.Subtraction(targetAddress, locationCounterAfterAddition);
+
+            int decimalValueCheck = Convert.ToInt32(displacement, 16);
+            if (decimalValueCheck > 4095)
+            {
+                nixbpe.B = "1";
+                nixbpe.P = "0";
+
+                // calculate base here
+                string baseLabel = labelTable.LabelLocationFinder("BASE");
+                displacement = HexOperations.Subtraction(targetAddress, labelTable.LabelLocationFinder(baseLabel));
+            }
+
+            thirdPartResult = HexOperations.ToBinray(displacement);
         }
         else
         {
@@ -126,7 +145,7 @@ public class PassTwo
         }
 
         // x
-        if (reference.Contains(','))
+        if (reference.Contains(",X"))
         {
             nixbpe.X = "1";
         }

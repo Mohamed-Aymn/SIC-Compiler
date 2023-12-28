@@ -52,6 +52,7 @@ public class PassOne
         switch (instruction)
         {
             case "BASE":
+                LabelTable.LabelHandler(reference, "BASE");
                 break;
             case "RESW":
                 int incrementValue = 3 * int.Parse(reference);
