@@ -13,11 +13,11 @@ internal class Program
         PassOne passOne = new(programCode);
 
         // pass two
-        // PassTwo passTwo = new(passOne.PassOneTable, passOne.LabelTable);
-        // foreach (var line in passOne.PassOneTable.Table)
-        // {
-        //     Console.WriteLine(line);
-        // }
+        PassTwo passTwo = new(passOne.PassOneTable, passOne.LabelTable);
+        foreach (var line in passTwo.ObjectCodeList)
+        {
+            Console.WriteLine(line);
+        }
 
         // HTE calulation
 

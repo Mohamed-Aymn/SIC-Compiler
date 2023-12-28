@@ -18,12 +18,10 @@ public class PassTwo
                 isFirstLine = false;
                 continue;  // Skip the current iteration and move to the next one
             }
-            if (line.Instruction == "End")
+            if (line.Instruction == "END" || line.Instruction == "End")
             {
                 break; // Exit the loop
             }
-
-            Console.Write(line.Instruction);
 
             // check special instruction cases
             if (line.Instruction == "RESW" ||
@@ -49,6 +47,10 @@ public class PassTwo
             /**
              * opcode calculation
              * */
+            if (line.Instruction.Contains('+'))
+            {
+                line.Instruction = line.Instruction.Substring(1);
+            }
             string opcode = Convertor.InstructionOpCode[line.Instruction];
 
             /**
@@ -93,26 +95,33 @@ public class PassTwo
             /**
              * Address
              * */
-
             string reference = "";
             if (line.Reference.Contains(",X"))
             {
-                reference = reference.Substring(0, reference.Length - 2);
+                // Console.Write(line.Reference);
+                reference = line.Reference.Substring(0, line.Reference.Length - 2);
             }
             else if (line.Reference.Contains('#') || line.Reference.Contains('@'))
             {
-                reference = reference.Substring(1);
+                reference = line.Reference.Substring(1);
             }
             string targetAddress = labelTable.LabelLocationFinder(reference);
-            string displacement = HexOperations.Addition(line.LocationCounter!, "3");
-            string address = HexOperations.Subtraction(targetAddress, displacement);
+            if (targetAddress == "")
+            {
+                reference = BinaryOperations.ToHex(reference).PadLeft(12, '0');
+            }
+            else
+            {
+                string displacement = HexOperations.Addition(line.LocationCounter!, "3");
+                reference = HexOperations.Subtraction(targetAddress, displacement);
+            }
 
             string objectCode = "";
             objectCode += HexOperations.ToBinray(opcode[0].ToString());
             objectCode += HexOperations.ToBinray(opcode[1].ToString())[0];
             objectCode += HexOperations.ToBinray(opcode[1].ToString())[1];
             objectCode += $"{n}{i}{x}{b}{p}{e}";
-            objectCode += address;
+            objectCode += reference;
 
             ObjectCodeList.AddLast(objectCode);
         }

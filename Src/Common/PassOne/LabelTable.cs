@@ -21,6 +21,6 @@ public class LabelTable
     public string LabelLocationFinder(string reference)
     {
         LabelTableElement foundRecord = Table.FirstOrDefault(record => record.Label == reference)!;
-        return foundRecord.Location ?? "";
+        return foundRecord == null ? "" : foundRecord.Location;
     }
 }
