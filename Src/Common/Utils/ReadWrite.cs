@@ -96,19 +96,32 @@ public static class ReadWrite
         Console.Write("\n");
     }
 
-    public static void FormattedHteWrite(string H, LinkedList<string> T, string E)
+    public static void FormattedListWrite(string title, LinkedList<string> list)
     {
         Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.Write("HTE");
+        Console.Write(title);
         Console.Write("\n");
 
         Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine(H);
-        foreach (var line in T)
+        foreach (var line in list)
         {
             Console.WriteLine(line);
         }
-        Console.WriteLine(E);
+
+        Console.Write("\n");
+        Console.ResetColor();
+    }
+
+    public static void FormattedLineWrite(string title, string line)
+    {
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.Write(title);
+        Console.Write("\n");
+
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine(line);
+
+        Console.Write("\n");
         Console.ResetColor();
     }
 }

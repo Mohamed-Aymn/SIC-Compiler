@@ -16,11 +16,16 @@ internal class Program
         // pass two
         PassTwo passTwo = new(passOne.PassOneTable, passOne.LabelTable);
 
-        // HTE calulation
+        // HTE and M calulation
         HTE hte = new(passOne.PassOneTable, passTwo.ObjectCodeList);
+        M m = new(passOne.PassOneTable);
 
         // formatted print
         ReadWrite.FormattedTableWrite(passOne.PassOneTable, passTwo.ObjectCodeList);
-        ReadWrite.FormattedHteWrite(hte.H, hte.T, hte.E);
+        ReadWrite.FormattedLineWrite("H", hte.H);
+        ReadWrite.FormattedListWrite("T", hte.T);
+        ReadWrite.FormattedListWrite("M", m.ModificationRecords);
+        ReadWrite.FormattedLineWrite("E", hte.E);
+
     }
 }
