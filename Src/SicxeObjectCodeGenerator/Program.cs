@@ -15,10 +15,6 @@ internal class Program
 
         // pass two
         PassTwo passTwo = new(passOne.PassOneTable, passOne.LabelTable);
-        foreach (var line in passTwo.ObjectCodeList)
-        {
-            Console.WriteLine(line);
-        }
 
         // HTE calulation
         HTE hte = new(passOne.PassOneTable, passTwo.ObjectCodeList);

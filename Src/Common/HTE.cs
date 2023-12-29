@@ -1,3 +1,4 @@
+using Common.ArithmeticOps;
 using Common.PassOne;
 
 namespace Common;
@@ -13,22 +14,21 @@ public class HTE
 
     public HTE(PassOneTable passOneTable, LinkedList<string> objectCodeList)
     {
-        HGenerator(passOneTable.Table, objectCodeList);
+        HGenerator(passOneTable.Table);
         TGenerator(passOneTable.Table, objectCodeList);
-        EGenerator(objectCodeList);
+        EGenerator(passOneTable.Table);
     }
 
-    public void HGenerator(LinkedList<PassOneTableElement> mainTable, LinkedList<string> objectCodeList)
+    public void HGenerator(LinkedList<PassOneTableElement> mainTable)
     {
         string programName = mainTable.First!.Value.Label!;
-        if (programName.Length < 6)
-        {
-            programName = programName.PadRight(6, 'X');
-        }
-        string firstObjectCode = objectCodeList.First!.Value!.PadLeft(6, '0');
-        string lasttObjectCode = objectCodeList.Last!.Value!.PadLeft(6, '0');
-        H = "H." + programName + "." + firstObjectCode + "." + lasttObjectCode;
+        string locationCounterStart = mainTable.First!.Value.LocationCounter!;
+        string locationCoutnerEnd = mainTable.Last!.Value.LocationCounter!;
+        string programLength = HexOperations.Subtraction(locationCoutnerEnd, locationCounterStart);
+
+        H = "H." + programName.PadRight(6, 'X') + "." + locationCounterStart.PadLeft(6, '0') + "." + programLength.PadLeft(6, '0');
     }
+
     public void TGenerator(LinkedList<PassOneTableElement> mainTable, LinkedList<string> objectCodeList)
     {
         string t = "T";
@@ -96,9 +96,9 @@ public class HTE
         }
     }
 
-    public void EGenerator(LinkedList<string> objectCodeList)
+    public void EGenerator(LinkedList<PassOneTableElement> mainTable)
     {
-        string lasttObjectCode = objectCodeList.Last!.Value!.PadLeft(6, '0');
-        E = "E." + lasttObjectCode;
+        string locationCoutnerStart = mainTable.First!.Value.LocationCounter!;
+        E = "E." + locationCoutnerStart.PadLeft(6, '0');
     }
 }
