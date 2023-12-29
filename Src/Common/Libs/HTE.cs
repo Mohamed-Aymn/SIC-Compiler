@@ -33,8 +33,27 @@ public class HTE
     {
         string t = "T";
         string firstLocationCounter = "";
+        int numberOfElements = 0;
         foreach (var line in mainTable)
         {
+            if (numberOfElements == 10)
+            {
+                // T closing 
+                if (t.Count(c => c == '.') < 2)
+                {
+                    continue;
+                }
+                string length = "." + HexOperations.Subtraction(line.LocationCounter!, firstLocationCounter).PadLeft(2, '0');
+                if (length.Length > 3)
+                {
+                    length = length.Substring(3);
+                }
+                t = t.Insert(8, length);
+                isFirstLine = true;
+                numberOfElements = 0;
+                T.AddLast(t);
+                t = "T";
+            }
             string currentObjectCode = "";
             try
             {
@@ -50,37 +69,32 @@ public class HTE
             }
 
             // skip the first line as there is no object code associated to it
-            if (isFirstLine)
+            if (t == "T" && line.LocationCounter != "")
             {
-                firstLocationCounter = mainTable.First!.Value.LocationCounter!.PadLeft(6, '0');
-                t += "." + firstLocationCounter;
-                isFirstLine = false;
+                firstLocationCounter = line.LocationCounter!;
+                t += "." + firstLocationCounter.PadLeft(6, '0');
                 continue;
             }
 
             // check if no object code
             if (currentObjectCode?.Length == 0)
             {
-                // if (T.Last!.Value != null && T.Last!.Value != "T")
-                string currentT = "";
-                try
+                if (t != "T")
                 {
-                    currentT = T.Last!.Value;
-                }
-                catch
-                {
-                    currentT = t;
-                }
-                bool isExist = T.Any(t => t == currentT);
-                if (!isExist)
-                {
+                    // t closing
+                    if (t.Count(c => c == '.') < 2)
+                    {
+                        continue;
+                    }
                     string length = "." + HexOperations.Subtraction(line.LocationCounter!, firstLocationCounter).PadLeft(2, '0');
                     if (length.Length > 3)
                     {
                         length = length.Substring(3);
                     }
-                    currentT = currentT.Insert(8, length);
-                    T.AddLast(currentT);
+                    t = t.Insert(8, length);
+                    isFirstLine = true;
+                    numberOfElements = 0;
+                    T.AddLast(t);
                 }
                 t = "T";
                 currentIndex++;
@@ -90,17 +104,13 @@ public class HTE
             // check the end of the loop
             if (currentObjectCode == null)
             {
-                // for (int i = 0; i < 2; i++)
-                // {
-                //     char c = t[i];
-                // }
-
                 T.AddLast(t);
                 break;
             }
 
             // add object code in the T string
             t += "." + currentObjectCode.PadLeft(6, '0');
+            numberOfElements++;
 
             currentIndex++;
         }
@@ -110,5 +120,10 @@ public class HTE
     {
         string locationCoutnerStart = mainTable.First!.Value.LocationCounter!;
         E = "E." + locationCoutnerStart.PadLeft(6, '0');
+    }
+
+    private void TClosing()
+    {
+
     }
 }
