@@ -76,32 +76,51 @@ public class PassTwo
 
     private string ThirdPartHandler(LabelTable labelTable, string reference, string locationCounter, Nixbpe nixbpe)
     {
-        string label = "";
+        string label = reference;
         if (reference.Contains(",X"))
         {
-            label = reference.Substring(0, reference.Length - 2);
+            label = label.Substring(0, label.Length - 2);
         }
-        else if (reference.Contains('#') || reference.Contains('@'))
+        else if (label.Contains('#') || label.Contains('@'))
         {
-            label = reference.Substring(1);
+            label = label.Substring(1);
         }
 
         string targetAddress = labelTable.LabelLocationFinder(label);
         string thirdPartResult = "";
 
-        if (targetAddress != "" && nixbpe.X != "1")
+        if (targetAddress == "")
+        {
+            foreach (char character in label)
+            {
+                thirdPartResult += HexOperations.ToBinray(character.ToString());
+            }
+        }
+        // starting from here targetAddress != ""
+        else if (nixbpe.E == "1" || (nixbpe.I == "1" && nixbpe.N == "0"))
         {
             foreach (char character in targetAddress)
             {
                 thirdPartResult += HexOperations.ToBinray(character.ToString());
             }
         }
-        else if (targetAddress != "" && nixbpe.X == "1")
+        else if ((nixbpe.E == "1" && nixbpe.I == "0") || (nixbpe.N == "1" && nixbpe.I == "1"))
         {
-            string locationCounterAfterAddition = HexOperations.Addition("3", locationCounter);
+            nixbpe.P = "1";
+
+            string locationCounterAfterAddition = HexOperations.Addition(nixbpe.E == "1" ? "4" : "3", locationCounter);
             string displacement = HexOperations.Subtraction(targetAddress, locationCounterAfterAddition);
+            if (displacement.Length > 4)
+            {
+                displacement = displacement.Substring(displacement.Length - 3);
+            }
+
 
             int decimalValueCheck = Convert.ToInt32(displacement, 16);
+            if (displacement.Length > 3)
+            {
+                displacement = displacement.Substring(displacement.Length - 3);
+            }
             if (decimalValueCheck > 4095)
             {
                 nixbpe.B = "1";
@@ -114,13 +133,41 @@ public class PassTwo
 
             thirdPartResult = HexOperations.ToBinray(displacement);
         }
-        else
-        {
-            foreach (char character in label)
-            {
-                thirdPartResult += HexOperations.ToBinray(character.ToString());
-            }
-        }
+
+        // if (targetAddress != "" && nixbpe.X != "1" && nixbpe.N != "1" && nixbpe.I != "1")
+        // {
+        //     foreach (char character in targetAddress)
+        //     {
+        //         thirdPartResult += HexOperations.ToBinray(character.ToString());
+        //     }
+        // }
+        // else if (
+        //     (targetAddress != "" && nixbpe.X == "1") ||
+        //     (targetAddress != "" && nixbpe.N == "1" && nixbpe.I == "1"))
+        // {
+        //     string locationCounterAfterAddition = HexOperations.Addition("3", locationCounter);
+        //     string displacement = HexOperations.Subtraction(targetAddress, locationCounterAfterAddition);
+
+        //     int decimalValueCheck = Convert.ToInt32(displacement, 16);
+        //     if (decimalValueCheck > 4095)
+        //     {
+        //         nixbpe.B = "1";
+        //         nixbpe.P = "0";
+
+        //         // calculate base here
+        //         string baseLabel = labelTable.LabelLocationFinder("BASE");
+        //         displacement = HexOperations.Subtraction(targetAddress, labelTable.LabelLocationFinder(baseLabel));
+        //     }
+
+        //     thirdPartResult = HexOperations.ToBinray(displacement);
+        // }
+        // else
+        // {
+        //     foreach (char character in label)
+        //     {
+        //         thirdPartResult += HexOperations.ToBinray(character.ToString());
+        //     }
+        // }
 
         return (nixbpe.E == "1") ? thirdPartResult.PadLeft(20, '0') : thirdPartResult.PadLeft(12, '0');
     }
@@ -151,10 +198,10 @@ public class PassTwo
         }
 
         // b and p
-        if (nixbpe.N == "1" && nixbpe.I == "1")
-        {
-            nixbpe.P = "1";
-        }
+        // if (nixbpe.N == "1" && nixbpe.I == "1")
+        // {
+        // nixbpe.P = "0";
+        // }
 
         //e 
         if (instruction.Contains('+'))

@@ -1,4 +1,5 @@
 ﻿using Common.Utils;
+using Common;
 
 namespace SicxeObjectCodeGenerator.Libs;
 
@@ -20,7 +21,10 @@ internal class Program
         }
 
         // HTE calulation
+        HTE hte = new(passOne.PassOneTable, passTwo.ObjectCodeList);
 
         // formatted print
+        ReadWrite.FormattedTableWrite(passOne.PassOneTable, passTwo.ObjectCodeList);
+        ReadWrite.FormattedHteWrite(hte.H, hte.T, hte.E);
     }
 }

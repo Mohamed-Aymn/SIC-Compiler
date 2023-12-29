@@ -1,6 +1,6 @@
 using Common.PassOne;
 
-namespace SicObjectCodeGenerator.Libs;
+namespace Common;
 
 public class HTE
 {
