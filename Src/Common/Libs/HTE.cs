@@ -1,7 +1,7 @@
 using Common.ArithmeticOps;
 using Common.PassOne;
 
-namespace Common;
+namespace Common.Libs;
 
 public class HTE
 {
@@ -32,6 +32,7 @@ public class HTE
     public void TGenerator(LinkedList<PassOneTableElement> mainTable, LinkedList<string> objectCodeList)
     {
         string t = "T";
+        string firstLocationCounter = "";
         foreach (var line in mainTable)
         {
             string currentObjectCode = "";
@@ -51,6 +52,8 @@ public class HTE
             // skip the first line as there is no object code associated to it
             if (isFirstLine)
             {
+                firstLocationCounter = mainTable.First!.Value.LocationCounter!.PadLeft(6, '0');
+                t += "." + firstLocationCounter;
                 isFirstLine = false;
                 continue;
             }
@@ -71,20 +74,27 @@ public class HTE
                 bool isExist = T.Any(t => t == currentT);
                 if (!isExist)
                 {
+                    string length = "." + HexOperations.Subtraction(line.LocationCounter!, firstLocationCounter).PadLeft(2, '0');
+                    if (length.Length > 3)
+                    {
+                        length = length.Substring(3);
+                    }
+                    currentT = currentT.Insert(8, length);
                     T.AddLast(currentT);
                 }
-                // T.AddLast(t);
-                // }
                 t = "T";
-                // break;
                 currentIndex++;
-                // TGenerator(mainTable, objectCodeList);
                 continue;
             }
 
             // check the end of the loop
             if (currentObjectCode == null)
             {
+                // for (int i = 0; i < 2; i++)
+                // {
+                //     char c = t[i];
+                // }
+
                 T.AddLast(t);
                 break;
             }

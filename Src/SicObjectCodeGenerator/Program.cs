@@ -1,5 +1,5 @@
 ﻿using Common.Utils;
-using Common;
+using Common.Libs;
 
 namespace SicObjectCodeGenerator.Libs;
 
