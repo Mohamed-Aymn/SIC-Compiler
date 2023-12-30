@@ -8,7 +8,7 @@ internal class Program
     private static void Main(string[] args)
     {
         // Read code
-        string programCode = ReadWrite.ReadProgramCode();
+        string programCode = ReadWrite.ReadProgramCode("Enter a multi-line string (Press Enter twice to finish):");
 
         // pass one
         PassOne passOne = new(programCode);

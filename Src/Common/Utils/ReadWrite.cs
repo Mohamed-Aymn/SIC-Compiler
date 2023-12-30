@@ -4,10 +4,11 @@ namespace Common.Utils;
 
 public static class ReadWrite
 {
-    public static string ReadProgramCode()
+    public static string ReadProgramCode(string message)
     {
         Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.WriteLine("Enter a multi-line string (Press Enter twice to finish):");
+        Console.WriteLine();
+        Console.WriteLine(message);
         Console.ResetColor();
 
         string input = "";
@@ -20,6 +21,16 @@ public static class ReadWrite
         }
 
         return input;
+    }
+
+    public static string ReadLine(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine();
+        Console.WriteLine(message);
+        Console.ResetColor();
+
+        return Console.ReadLine()!;
     }
 
     public static void FormattedTableWrite(PassOneTable passOneTable, LinkedList<string> objectCodeList)

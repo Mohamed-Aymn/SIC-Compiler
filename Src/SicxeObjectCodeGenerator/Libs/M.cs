@@ -1,4 +1,3 @@
-
 using Common.ArithmeticOps;
 using Common.PassOne;
 
@@ -9,7 +8,6 @@ public class M
     public LinkedList<string> ModificationRecords { set; get; } = new();
     public M(PassOneTable passOneTable)
     {
-        string m = "M";
         foreach (var line in passOneTable.Table)
         {
             if (line.Instruction.Contains('+'))
