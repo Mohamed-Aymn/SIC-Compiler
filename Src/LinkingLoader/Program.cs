@@ -41,6 +41,7 @@ internal class Program
         MainTable mainTable = new(htes, externalSymbols);
 
         // formatted print
-        Write.FormattedPrint();
+        Write.FormattedPrint(); // external symbol table
+        Write.FormattedPrint(); // main table
     }
 }
