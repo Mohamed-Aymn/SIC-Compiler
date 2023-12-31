@@ -13,7 +13,7 @@ public class ExternalProgramSymbols
     {
         StartAddress = startAddress;
 
-        ControlSectionName = hte[0].Substring(2, 8).Replace("X", "");
+        ControlSectionName = hte[0].Substring(2, 7).Replace("X", "");
 
         Length = hte[0].Substring(hte[0].Length - 6).Replace("0", "");
 
@@ -21,13 +21,14 @@ public class ExternalProgramSymbols
 
         // get each variable name and location
         string refinedD = hte[1].Substring(2).Replace(".", "");
-        for (int i = 0; i < refinedD.Length / 6; i++)
+        for (int i = 0; i < refinedD.Length / 12; i++)
         {
             // get each 6 characters
-            string varData = refinedD.Substring(6 * 1, 6 * (i + 1));
+            string varData = refinedD.Substring(12 * i, i == 0 ? 12 : 12 * i);
 
             // divide them by two, store the first one as key and the second one as value 
-            Symbols.Add(varData.Substring(6).Replace("X", ""), varData.Substring(6, 12).Replace("0", ""));
+            // Console.WriteLine(varData.Substring(6).Replace("X", ""));
+            Symbols.Add(varData.Substring(0, 6).Replace("X", ""), varData.Substring(6, 6).Replace("0", ""));
         }
     }
 }

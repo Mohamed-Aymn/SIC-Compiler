@@ -34,7 +34,7 @@ internal class Program
             externalSymbols.AddLast(
                 new ExternalProgramSymbols(
                     programHte,
-                    i == 0 ? startAddress : externalSymbols.ElementAt(j - 1).EndAddress));
+                    j == 0 ? startAddress : externalSymbols.ElementAt(j - 1).EndAddress));
         }
 
         // main table variable
