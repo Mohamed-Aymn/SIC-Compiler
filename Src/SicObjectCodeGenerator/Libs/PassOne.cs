@@ -12,7 +12,7 @@ public class PassOne
     public PassOne(string programCode)
     {
         // create organized table (this is a vertical linked list as the variable here is table length not width)
-        CodeFormatter codeFormatter = new(programCode);
+        SicOneFormatter codeFormatter = new(programCode);
         bool isFirstLine = true;
         foreach (string line in codeFormatter.Lines)
         {

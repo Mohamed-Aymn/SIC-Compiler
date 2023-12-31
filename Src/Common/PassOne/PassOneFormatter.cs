@@ -1,18 +1,14 @@
+using Common.Libs;
 using Common.ValueObjects;
 
 namespace Common.PassOne;
 
-public class CodeFormatter
+public class SicOneFormatter
 {
     public string[] Lines { get; set; }
-    public CodeFormatter(string programCode)
+    public SicOneFormatter(string programCode)
     {
-        Lines = SplitLines(programCode);
-    }
-
-    public string[] SplitLines(string programCode)
-    {
-        return programCode.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+        Lines = CodeFormatter.SplitLines(programCode);
     }
 
     public LineElements LineFormatter(string line, bool isFirstLine, string locationCounter)

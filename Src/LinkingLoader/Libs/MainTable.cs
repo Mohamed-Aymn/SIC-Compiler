@@ -4,7 +4,7 @@ public class MainTable
 {
     // Table variable
 
-    public MainTable(LinkedList<string> htes, LinkedList<ExternalProgramSymbols> externalSymbols)
+    public MainTable(LinkedList<string[]> htes, LinkedList<ExternalProgramSymbols> externalSymbols)
     {
         TableFiller();
         TableModifier();
