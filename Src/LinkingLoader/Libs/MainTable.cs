@@ -64,8 +64,8 @@ public class MainTable
                 {
                     isTMore = false;
                 }
+                i++;
             }
-            // startAddress.X = 
             currentProgram++;
         }
     }
