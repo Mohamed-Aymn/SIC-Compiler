@@ -2,6 +2,7 @@
 using Common.Libs;
 using LinkingLoader.Libs;
 using LinkingLoader.Utils;
+using LinkingLoader.ValueObjects;
 
 internal class Program
 {
@@ -25,6 +26,10 @@ internal class Program
             i++;
         }
         string startAddress = ReadWrite.ReadLine("Enter starting Location Counter:");
+        Coordinates startAddressCoordinates = new(
+            startAddress.Substring(0, 3),
+            startAddress.Substring(3)
+        );
 
         // external symbols
         LinkedList<ExternalProgramSymbols> externalSymbols = new();
@@ -34,7 +39,8 @@ internal class Program
             externalSymbols.AddLast(
                 new ExternalProgramSymbols(
                     programHte,
-                    j == 0 ? startAddress : externalSymbols.ElementAt(j - 1).EndAddress));
+                    j == 0 ? startAddressCoordinates : externalSymbols.ElementAt(j - 1).EndAddress));
+            j++;
         }
 
         // main table variable

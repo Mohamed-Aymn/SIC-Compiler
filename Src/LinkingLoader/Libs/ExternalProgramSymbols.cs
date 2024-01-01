@@ -1,15 +1,16 @@
 using Common.ArithmeticOps;
+using LinkingLoader.ValueObjects;
 
 namespace LinkingLoader.Libs;
 
 public class ExternalProgramSymbols
 {
     public string ControlSectionName { get; set; }
-    public string EndAddress { get; set; }
-    public string StartAddress { get; set; }
+    public Coordinates EndAddress { get; set; }
+    public Coordinates StartAddress { get; set; }
     public string Length { get; set; }
     public Dictionary<string, string> Symbols { get; set; } = new();
-    public ExternalProgramSymbols(string[] hte, string startAddress)
+    public ExternalProgramSymbols(string[] hte, Coordinates startAddress)
     {
         StartAddress = startAddress;
 
@@ -17,7 +18,10 @@ public class ExternalProgramSymbols
 
         Length = hte[0].Substring(hte[0].Length - 6).Replace("0", "");
 
-        EndAddress = HexOperations.Addition(StartAddress, Length);
+        string endAddress = HexOperations.Addition(StartAddress.X + StartAddress.Y, Length);
+        EndAddress = new(
+            endAddress.Substring(0, 3),
+            endAddress.Substring(3));
 
         // get each variable name and location
         string refinedD = hte[1].Substring(2).Replace(".", "");

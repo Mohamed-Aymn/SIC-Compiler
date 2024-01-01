@@ -1,10 +1,11 @@
 using Common.ArithmeticOps;
+using LinkingLoader.ValueObjects;
 
 namespace LinkingLoader.Libs;
 
 public class MainTable
 {
-    public Dictionary<string, Dictionary<string, string>> Table { set; get; } = new();
+    public Dictionary<Coordinates, string> Table { set; get; } = new();
 
     public MainTable(LinkedList<string[]> htes, LinkedList<ExternalProgramSymbols> externalSymbols)
     {
@@ -16,27 +17,44 @@ public class MainTable
         int currentProgram = 0;
         foreach (string[] hte in htes)
         {
+            Coordinates programStartAddress = externalSybmols.ElementAt(currentProgram).StartAddress;
             bool isTMore = true;
-            string startAddress = externalSybmols.ElementAt(currentProgram).StartAddress;
             int i = 0;
             while (isTMore)
             {
-                int column = 0;
+                string TStartAddressCalculation = HexOperations.Addition(programStartAddress.X + programStartAddress.Y, hte[3 + i].Substring(2, 6));
+                Coordinates TStartAddress = new(
+                    TStartAddressCalculation.Substring(0, 3),
+                    TStartAddressCalculation.Substring(3));
+
+                string column = TStartAddress.Y;
                 bool isTwoBits = false;
-                string row = startAddress;
-                foreach (char bit in hte[3 + i])
+                string row = TStartAddress.X;
+                foreach (char bit in hte[3 + i].Substring(12))
                 {
                     if (isTwoBits)
                     {
-                        column++;
+                        column = HexOperations.Addition(column, "1");
+                        isTwoBits = false;
                     }
-                    if (column == 16)
+
+                    if (column == "10")
                     {
-                        column = 0;
+                        column = "0";
+                        row = HexOperations.Addition(row, "1");
                     }
-                    row = HexOperations.Addition(row, "10");
-                    Table[row][BinaryOperations.ToHex(i.ToString())] += bit.ToString();
-                    if (Table[row][BinaryOperations.ToHex(i.ToString())].Length == 2)
+
+                    Coordinates coordinates = new(row, column);
+                    if (Table.ContainsKey(coordinates))
+                    {
+                        Table[coordinates] += bit.ToString();
+                    }
+                    else
+                    {
+                        Table.Add(coordinates, bit.ToString());
+                    }
+
+                    if (Table[coordinates].Length == 2)
                     {
                         isTwoBits = true;
                     }
@@ -47,6 +65,7 @@ public class MainTable
                     isTMore = false;
                 }
             }
+            // startAddress.X = 
             currentProgram++;
         }
     }
@@ -61,24 +80,27 @@ public class MainTable
                 continue;
             }
 
-            string startAddress = externalSymbols.ElementAt(currentProgram).StartAddress;
+            Coordinates startAddress = externalSymbols.ElementAt(currentProgram).StartAddress;
             string varAddress = hte[currentProgram].Substring(2, 8);
             string numberOfModifiedBits = hte[currentProgram].Substring(9, 11);
-            string modifiedAddress = HexOperations.Addition(startAddress, varAddress);
+            string modifiedAddress = HexOperations.Addition(startAddress.X + startAddress.Y, varAddress);
             string row = modifiedAddress.Substring(0, 3); // first three bits
             string column = modifiedAddress.Substring(-1); // last bit
+            Coordinates coordinates = new(row, column);
 
             if (numberOfModifiedBits == "5")
             {
-                Table[row][column] = Table[row][column].Substring(-1) + modifiedAddress[0];
+                Table[coordinates] = Table[coordinates].Substring(-1) + modifiedAddress[0];
             }
             else
             {
-                Table[row][column] = modifiedAddress.Substring(2);
+                Table[coordinates] = modifiedAddress.Substring(2);
             }
 
-            Table[HexOperations.Addition(row, "1")][column] = modifiedAddress.Substring(2, 4);
-            Table[HexOperations.Addition(row, "2")][column] = modifiedAddress.Substring(4, 6);
+            coordinates.Y = HexOperations.Addition(coordinates.Y, "1");
+            Table[coordinates] = modifiedAddress.Substring(2, 4);
+            coordinates.Y = HexOperations.Addition(coordinates.Y, "1");
+            Table[coordinates] = modifiedAddress.Substring(4, 6);
 
             currentProgram++;
         }
